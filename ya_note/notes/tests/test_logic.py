@@ -37,7 +37,8 @@ class TestNoteCreate(TestCase):
 
     def test_logged_user_can_create_note(self):
         """Тестирование залогиненного пользователя
-        создавать заметки."""
+        создавать заметки.
+        """
         response = self.auth_client.post(
             self.ADD_PAGE_URL,
             data=self.form_data)
@@ -85,7 +86,8 @@ class TestNoteCreate(TestCase):
 
     def test_other_user_cant_edit_note(self):
         """Тестирование возможности редактирования заметки
-        другим залогиненным пользователем."""
+        другим залогиненным пользователем.
+        """
         note = Note.objects.create(
             title='Заголовок заметки',
             text='Тект заметки',
@@ -102,7 +104,8 @@ class TestNoteCreate(TestCase):
 
     def test_author_can_edit_note(self):
         """Тестирование редактирования заметки залогиненным
-        пользователем"""
+        пользователем.
+        """
         note = Note.objects.create(
             title='Заголовок заметки',
             text='Тект заметки',
@@ -119,7 +122,8 @@ class TestNoteCreate(TestCase):
 
     def test_other_author_cant_delete_note(self):
         """Тестирование возможности удаления заметки
-        другим залогиненным пользователем (не автор)."""
+        другим залогиненным пользователем (не автор).
+        """
         note = Note.objects.create(
             title='Заголовок заметки',
             text='Тект заметки',
@@ -133,7 +137,8 @@ class TestNoteCreate(TestCase):
 
     def test_logged_user_can_delete_note(self):
         """Тестирование возможности удаления заметки
-        залогиненным пользователем (автором)."""
+        залогиненным пользователем (автором).
+        """
         note = Note.objects.create(
             title='Заголовок заметки',
             text='Тект заметки',

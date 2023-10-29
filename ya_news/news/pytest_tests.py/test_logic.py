@@ -11,7 +11,8 @@ from news.forms import BAD_WORDS, WARNING
 @pytest.mark.django_db
 def test_anonymouse_user_cant_create_comment(client, news, form_data):
     """Тестирование анонимный пользователь не может
-    создать комментарий"""
+    создать комментарий
+    """
     url = reverse('news:detail', args=(news.id,))
     response = client.post(url, data=form_data)
     login_url = reverse('users:login')
@@ -21,13 +22,14 @@ def test_anonymouse_user_cant_create_comment(client, news, form_data):
 
 
 def test_autorize_user_can_sent_comment(
-        author_client,
-        form_data,
-        news,
-        author
+    author_client,
+    form_data,
+    news,
+    author
 ):
     """Тестирование авторизованный пользователь может
-    оставить комментарий."""
+    оставить комментарий.
+    """
     url = reverse('news:detail', args=(news.id,))
     response = author_client.post(url, data=form_data)
     assertRedirects(response, f'{url}#comments')
@@ -40,7 +42,8 @@ def test_autorize_user_can_sent_comment(
 
 def test_user_cant_use_bad_words(author_client, news, form_data):
     """Пользователь не может использовать в комментарии
-    запрещенный слова."""
+    запрещенный слова.
+    """
     url = reverse('news:detail', args=(news.id,))
     bad_words_data = {'text': f'Какой-то текст, {BAD_WORDS[0]}, еще текст'}
     response = author_client.post(url, data=bad_words_data)
@@ -49,11 +52,11 @@ def test_user_cant_use_bad_words(author_client, news, form_data):
 
 
 def test_author_can_edit_comment(
-        author_client,
-        form_data,
-        news,
-        author, 
-        comment
+    author_client,
+    form_data,
+    news,
+    author,
+    comment
 ):
     """Тестирование редактирования комментария автором"""
     url = reverse('news:detail', args=(news.id,))

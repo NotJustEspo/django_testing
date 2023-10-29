@@ -23,7 +23,8 @@ class TestList(TestCase):
 
     def test_authorized_author_form(self):
         """Тестирование передачи формы на страницу
-        создания заметок и редактирования."""
+        создания заметок и редактирования.
+        """
         urls = (
             ('notes:add', None),
             ('notes:edit', (self.note.slug,)),
@@ -44,7 +45,8 @@ class TestList(TestCase):
 
     def test_note_not_in_list_for_another_author(self):
         """Тестирование недоступности чужих заметок
-        у других авторов"""
+        у других авторов.
+        """
         self.client.force_login(self.author2)
         response = self.client.get(self.LIST_URL)
         object_list = response.context['object_list']
