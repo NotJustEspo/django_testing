@@ -18,16 +18,20 @@ pytestmark = pytest.mark.django_db
     ),
 )
 def test_home_availability_for_anonymous_user(client, name, expected_status):
-    """Тестирование доступности главной страницы
-    анонимному пользователю."""
+    """
+    Тестирование доступности главной страницы
+    анонимному пользователю.
+    """
     url = reverse(name)
     response = client.get(url)
     assert response.status_code == expected_status
 
 
 def test_detail_page_availability_for_anonymous_user(client, news):
-    """Тестирование доступности страницы отдельной
-    новости анонимному пользователю."""
+    """
+    Тестирование доступности страницы отдельной
+    новости анонимному пользователю.
+    """
     url = reverse('news:detail', args=(news.id,))
     response = client.get(url)
     assert response.status_code == HTTPStatus.OK
@@ -50,8 +54,10 @@ def test_availability_for_comment_edit_and_delete(
     comment,
     expected_status
 ):
-    """Тестирование удаление и реадктирования комментария
-    автору комментария."""
+    """
+    Тестирование удаление и реадктирования комментария
+    автору комментария.
+    """
     url = reverse(name, args=(comment.id,))
     response = parametrize_client.get(url)
     assert response.status_code == expected_status
@@ -65,7 +71,8 @@ def test_availability_for_comment_edit_and_delete(
     )
 )
 def test_redirect_for_anonymous_client(client, name, args):
-    """Тестирование редиректа анонимного пользователя
+    """
+    Тестирование редиректа анонимного пользователя
     при попытке удаления или редактирования комментария.
     """
     login_url = reverse('users:login')
