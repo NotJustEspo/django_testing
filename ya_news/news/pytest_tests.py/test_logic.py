@@ -1,10 +1,10 @@
 import pytest
-from http import HTTPStatus
 
+from http import HTTPStatus
 from pytest_django.asserts import assertRedirects, assertFormError
 from django.urls import reverse
 
-from news.models import News, Comment
+from news.models import Comment
 from news.forms import BAD_WORDS, WARNING
 
 
