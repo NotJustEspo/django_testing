@@ -22,7 +22,6 @@ class TestRoutes(TestCase):
 
     def test_pages_availability(self):
         """Тест отображения страниц для анонимного пользователя"""
-
         urls = (
             ('notes:home', None),
             ('users:login', None),
@@ -37,7 +36,6 @@ class TestRoutes(TestCase):
 
     def test_availability_for_author(self):
         """Тестирование доступности страниц для авторизованного пользователя"""
-
         urls = (
             ('notes:edit', (self.note.slug,)),
             ('notes:detail', (self.note.slug,)),
@@ -56,7 +54,6 @@ class TestRoutes(TestCase):
 
     def test_redirect_for_author(self):
         """Тестирование страницы редиректа для неавторизованного автора"""
-
         login_url = reverse('users:login')
         urls = (
             ('notes:add', None),
