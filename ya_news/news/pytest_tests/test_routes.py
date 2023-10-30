@@ -57,12 +57,11 @@ def test_availability_for_comment_edit_and_delete(
     'name',
     (EDIT_URL, DELETE_URL),
 )
-def test_redirect_for_anonymous_client(client, name):
+def test_redirect_for_anonymous_client(client, name, login_url):
     """
     Тестирование редиректа анонимного пользователя
     при попытке удаления или редактирования комментария.
     """
-    login_url = reverse('users:login')
     expected_url = f'{login_url}?next={name}'
     response = client.get(name)
     assertRedirects(response, expected_url)
