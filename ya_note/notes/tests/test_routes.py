@@ -30,7 +30,6 @@ class TestRoutes(TestCase):
         cls.detail_url = reverse('notes:detail', args=(cls.note.slug,))
         cls.delete_url = reverse('notes:delete', args=(cls.note.slug,))
 
-
     def test_pages_availability(self):
         """Тест отображения страниц для анонимного пользователя"""
         urls = (
