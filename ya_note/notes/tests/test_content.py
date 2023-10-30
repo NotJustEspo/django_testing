@@ -3,6 +3,7 @@ from django.test import TestCase
 from django.urls import reverse
 
 from notes.models import Note
+from notes.forms import NoteForm
 
 User = get_user_model()
 
@@ -22,7 +23,8 @@ class TestList(TestCase):
         )
 
     def test_authorized_author_form(self):
-        """Тестирование передачи формы на страницу
+        """
+        Тестирование передачи формы на страницу
         создания заметок и редактирования.
         """
         urls = (
@@ -35,19 +37,21 @@ class TestList(TestCase):
                 self.client.force_login(self.author)
                 response = self.client.get(url)
                 self.assertIn('form', response.context)
+                self.assertIsInstance(response.context['form'], NoteForm)
 
-    def test_note_in_list_for_author(self):
-        """Тестирование отображения записи в листе автора."""
-        self.client.force_login(self.author)
-        response = self.client.get(self.LIST_URL)
-        object_list = response.context['object_list']
-        self.assertIn(self.note, object_list)
 
-    def test_note_not_in_list_for_another_author(self):
-        """Тестирование недоступности чужих заметок
-        у других авторов.
+    def test_note_in_list_for_different_authors(self):
         """
-        self.client.force_login(self.author2)
-        response = self.client.get(self.LIST_URL)
-        object_list = response.context['object_list']
-        self.assertNotIn(self.note, object_list)
+        Тестирование отображения в листе автора и
+        других авторов.
+        """
+        attrs = (
+            (self.author, self.assertIn),
+            (self.author2, self.assertNotIn),
+        )
+        for name, args in attrs:
+            self.client.force_login(name)
+            with self.subTest(name=name):
+                response = self.client.get(self.LIST_URL)
+                object_list = response.context['object_list']
+                args(self.note, object_list)
