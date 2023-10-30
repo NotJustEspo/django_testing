@@ -10,7 +10,8 @@ pytestmark = pytest.mark.django_db
 
 
 def test_news_count(client):
-    """Тестирование количества новостей на
+    """
+    Тестирование количества новостей на
     главной странице.
     """
     home_url = reverse('news:home')
@@ -49,12 +50,13 @@ def test_comment_order(client, news, author):
     assert all_comments[0].created < all_comments[1].created
 
 
-def test_pages_contains_form_for_authorize_user(author_client, news):
-    """Тестирование доступности формы комментария
+def test_pages_contains_form_for_authorize_user(user_client, news):
+    """
+    Тестирование доступности формы комментария
     авторизованному пользователю.
     """
     url = reverse('news:detail', args=(news.id,))
-    response = author_client.get(url)
+    response = user_client.get(url)
     assert 'form' in response.context
 
 
