@@ -39,7 +39,6 @@ class TestList(TestCase):
                 self.assertIn('form', response.context)
                 self.assertIsInstance(response.context['form'], NoteForm)
 
-
     def test_note_in_list_for_different_authors(self):
         """
         Тестирование отображения в листе автора и

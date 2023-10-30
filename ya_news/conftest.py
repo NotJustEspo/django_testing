@@ -16,21 +16,19 @@ def author_client(author, client):
 
 @pytest.fixture
 def news(author):
-    news = News.objects.create(
+    return News.objects.create(
         title='Заголовок',
         text='Текст публикации'
     )
-    return news
 
 
 @pytest.fixture
 def comment(author, news):
-    comment = Comment.objects.create(
+    return Comment.objects.create(
         news=news,
         author=author,
         text='Текст комментария'
     )
-    return comment
 
 
 @pytest.fixture
@@ -44,4 +42,4 @@ def form_data(author, news):
 
 @pytest.fixture
 def comment_id(comment):
-    return comment.id,
+    return (comment.id,)
