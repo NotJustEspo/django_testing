@@ -1,5 +1,9 @@
+from datetime import timedelta
+
 import pytest
+from django.conf import settings
 from django.urls import reverse
+from django.utils import timezone
 from django.test.client import Client
 
 from news.models import News, Comment
@@ -32,6 +36,19 @@ def comment(author, news):
         author=author,
         text='Текст комментария'
     )
+
+
+@pytest.fixture
+def comment_created(news, author):
+    now = timezone.now()
+    for index in range(10):
+        comment = Comment.objects.create(
+            news=news,
+            author=author,
+            text=f'Текст {index}',
+        )
+        comment.created = now + timedelta(days=index)
+        comment.save()
 
 
 @pytest.fixture
@@ -81,3 +98,8 @@ def logout_url():
 @pytest.fixture
 def signup_url():
     return reverse('users:signup')
+
+
+@pytest.fixture
+def news_count_fixture():
+    return settings.NEWS_COUNT_ON_HOME_PAGE + 1

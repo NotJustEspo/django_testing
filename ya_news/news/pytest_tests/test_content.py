@@ -1,67 +1,66 @@
-import pytest
-
 from datetime import timedelta
-from django.conf import settings
-from django.utils import timezone
-from django.urls import reverse
-from news.models import Comment
+
+import pytest
+import pdb
+
+from news.forms import CommentForm
 
 pytestmark = pytest.mark.django_db
 
 
-def test_news_count(client):
+def test_news_count(
+        client,
+        news_count_fixture,
+        home_url
+):
     """
     Тестирование количества новостей на
     главной странице.
     """
-    home_url = reverse('news:home')
     response = client.get(home_url)
-    object_list = response.context['object_list']
+    object_list = response.context.get('object_list')
+    assert object_list is not None
     news_count = len(object_list)
-    assert news_count <= settings.NEWS_COUNT_ON_HOME_PAGE
+    assert news_count < news_count_fixture
 
 
-def test_order_news(client):
+def test_order_news(client, home_url, news):
     """Тестирование сортировки отображения новостей"""
-    home_url = reverse('news:home')
     response = client.get(home_url)
-    object_list = response.context['object_list']
+    object_list = response.context.get('object_list')
+    assert object_list is not None
     all_dates = [news.date for news in object_list]
     sorted_dates = sorted(all_dates, reverse=True)
     assert all_dates == sorted_dates
 
 
-def test_comment_order(client, news, author):
+def test_comment_order(
+        client,
+        detail_url,
+        news,
+        comment_created
+):
     """Тестирование сортировки комментариев."""
-    now = timezone.now()
-    for index in range(2):
-        comment = Comment.objects.create(
-            news=news,
-            author=author,
-            text=f'Текст {index}',
-        )
-        comment.created = now + timedelta(days=index)
-        comment.save()
-    detail_url = reverse('news:detail', args=(news.id,))
     response = client.get(detail_url)
-    assert 'news' in response.context
-    news = response.context['news']
-    all_comments = news.comment_set.all()
-    assert all_comments[0].created < all_comments[1].created
+    comments = response.context.get('news')
+    assert comments is not None
+    comments_set = news.comment_set.all()
+    all_comments = [comment.created for comment in comments_set]
+    sorted_comments = sorted(all_comments)
+    assert all_comments == sorted_comments
 
 
-def test_pages_contains_form_for_authorize_user(user_client, news):
+def test_pages_contains_form_for_authorize_user(detail_url, user_client):
     """
     Тестирование доступности формы комментария
     авторизованному пользователю.
     """
-    url = reverse('news:detail', args=(news.id,))
-    response = user_client.get(url)
+    response = user_client.get(detail_url)
     assert 'form' in response.context
+    assert isinstance(response.context['form'], CommentForm)
 
 
-def test_pages_contains_form_for_non_authorize_user(client, news):
+def test_pages_contains_form_for_non_authorize_user(client, detail_url):
     """Тестирование не доступности формы комментария анонимному пользователю"""
-    url = reverse('news:detail', args=(news.id,))
-    response = client.get(url)
+    response = client.get(detail_url)
     assert 'form' not in response.context

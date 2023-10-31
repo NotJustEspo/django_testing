@@ -102,7 +102,7 @@ def test_user_cant_delete_comment_of_another_author(
 
 def test_author_can_delete_comment(
         detail_url,
-        delete_url, 
+        delete_url,
         user_client
 ):
     """Тестирование возможности удаления своего комментария"""
