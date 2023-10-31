@@ -1,7 +1,4 @@
-from datetime import timedelta
-
 import pytest
-import pdb
 
 from news.forms import CommentForm
 
