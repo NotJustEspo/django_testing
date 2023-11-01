@@ -33,9 +33,8 @@ class TestList(TestCase):
         )
         for name, args in urls:
             with self.subTest(name=name):
-                url = reverse(name, args=args)
                 self.client.force_login(self.author)
-                response = self.client.get(url)
+                response = self.client.get(reverse(name, args=args))
                 self.assertIn('form', response.context)
                 self.assertIsInstance(response.context['form'], NoteForm)
 

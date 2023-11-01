@@ -61,6 +61,7 @@ class TestNoteCreate(TestCase):
 
     def test_not_unique_slug(self):
         """Тестирование логики slug"""
+        equal_notes_count = Note.objects.count()
         self.form_data['slug'] = self.note.slug
         response = self.auth_client.post(
             self.ADD_PAGE_URL,
@@ -73,7 +74,7 @@ class TestNoteCreate(TestCase):
             errors=(self.note.slug + WARNING)
         )
         note_count = Note.objects.count()
-        self.assertEqual(note_count, 1)
+        self.assertEqual(note_count, equal_notes_count)
 
     def test_empty_slug(self):
         """Тестирование пустого поля slug"""
@@ -117,18 +118,20 @@ class TestNoteCreate(TestCase):
         """Тестирование возможности удаления заметки
         другим залогиненным пользователем (не автор).
         """
-        note_count = Note.objects.count()
+        equal_note_count = Note.objects.count()
         delete_url = reverse('notes:delete', args=(self.note.slug,))
         response = self.auth_client2.post(delete_url)
         self.assertEqual(response.status_code, HTTPStatus.NOT_FOUND)
-        self.assertEqual(note_count, 1)
+        note_count = Note.objects.count()
+        self.assertEqual(note_count, equal_note_count)
 
     def test_logged_user_can_delete_note(self):
         """Тестирование возможности удаления заметки
         залогиненным пользователем (автором).
         """
+        equal_note_count = Note.objects.count()
         delete_url = reverse('notes:delete', args=(self.note.slug,))
         response = self.auth_client.post(delete_url)
         self.assertRedirects(response, reverse('notes:success'))
         note_count = Note.objects.count()
-        self.assertEqual(note_count, 0)
+        self.assertEqual(equal_note_count - 1, note_count)

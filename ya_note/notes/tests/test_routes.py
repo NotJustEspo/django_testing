@@ -33,10 +33,10 @@ class TestRoutes(TestCase):
     def test_pages_availability(self):
         """Тест отображения страниц для анонимного пользователя"""
         urls = (
-            (self.home_url),
-            (self.login_url),
-            (self.logout_url),
-            (self.signup_url),
+            self.home_url,
+            self.login_url,
+            self.logout_url,
+            self.signup_url,
         )
         for elem in urls:
             with self.subTest(elem=elem):
@@ -46,12 +46,12 @@ class TestRoutes(TestCase):
     def test_availability_for_author(self):
         """Тестирование доступности страниц для авторизованного пользователя"""
         urls = (
-            (self.edit_url),
-            (self.detail_url),
-            (self.delete_url),
-            (self.add_url),
-            (self.list_url),
-            (self.success_url),
+            self.edit_url,
+            self.detail_url,
+            self.delete_url,
+            self.add_url,
+            self.list_url,
+            self.success_url,
         )
         for elem in urls:
             user = self.author
@@ -64,12 +64,12 @@ class TestRoutes(TestCase):
         """Тестирование страницы редиректа для неавторизованного автора"""
         login_url = reverse('users:login')
         urls = (
-            (self.add_url),
-            (self.list_url),
-            (self.success_url),
-            (self.detail_url),
-            (self.edit_url),
-            (self.delete_url),
+            self.add_url,
+            self.list_url,
+            self.success_url,
+            self.detail_url,
+            self.edit_url,
+            self.delete_url,
         )
         for elem in urls:
             redirect_url = f'{login_url}?next={elem}'
