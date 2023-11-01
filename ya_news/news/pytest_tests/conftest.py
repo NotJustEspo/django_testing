@@ -6,7 +6,13 @@ from django.urls import reverse
 from django.utils import timezone
 from django.test.client import Client
 
+from news.forms import BAD_WORDS
 from news.models import News, Comment
+
+
+@pytest.fixture
+def bad_words_data():
+    return {'text': f'Какой-то текст, {BAD_WORDS[0]}, еще текст'}
 
 
 @pytest.fixture
@@ -58,11 +64,6 @@ def form_data(author, news):
         'author': author,
         'text': 'Текст комментария'
     }
-
-
-@pytest.fixture
-def comment_id(comment):
-    return (comment.id,)
 
 
 @pytest.fixture

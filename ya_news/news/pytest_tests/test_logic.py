@@ -3,7 +3,7 @@ from http import HTTPStatus
 import pytest
 from pytest_django.asserts import assertRedirects, assertFormError
 
-from news.forms import BAD_WORDS, WARNING
+from news.forms import WARNING
 from news.models import Comment
 
 
@@ -45,6 +45,7 @@ def test_autorize_user_can_sent_comment(
 
 
 def test_user_cant_use_bad_words(
+        bad_words_data,
         detail_url,
         user_client
 ):
@@ -52,7 +53,6 @@ def test_user_cant_use_bad_words(
     Пользователь не может использовать в комментарии
     запрещенный слова.
     """
-    bad_words_data = {'text': f'Какой-то текст, {BAD_WORDS[0]}, еще текст'}
     response = user_client.post(detail_url, data=bad_words_data)
     assertFormError(response, 'form', 'text', errors=WARNING)
     assert Comment.objects.count() == 0
