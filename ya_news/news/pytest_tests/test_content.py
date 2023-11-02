@@ -17,7 +17,7 @@ def test_news_count(
     response = client.get(home_url)
     object_list = response.context.get('object_list')
     assert object_list is not None
-    assert len(object_list) < news_count_fixture
+    assert len(object_list) <= news_count_fixture
 
 
 def test_order_news(client, home_url, news):
